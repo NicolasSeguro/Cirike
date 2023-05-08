@@ -6,3 +6,52 @@
 .bg-body-cirike, .section-one, .section-two, footer{
   background-image: url('../images/bg-cirike/bg-hero.png');
 }
+
+h1, h2, h3, h4, h5, h6, p, a, button {
+  font-family: 'Poppins', sans-serif;
+}
+
+.section-one h1 {
+  font-weight: 700;
+  font-size: 50px;
+  color: white;
+  border-bottom: 3px solid #fff;
+  padding: 20px 0;
+}
+
+.section-one p {
+  font-weight: 500;
+  font-size: 18px;
+  color: white;
+}
+#header a {
+  color: white;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+@media screen and (max-width: 968px){
+  .section-one h1 {
+    font-size: 24px;
+    padding: 10px;
+  }
+}
+
+#abc h3 {
+  color: #309975;
+  font-weight: 700;
+  font-size: 30px;
+}
+
+#abc p {
+  color: #575757;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+#form button {
+  border: none;
+  color: white;
+  font-weight: 500;
+  font-size: 15px;
+}
