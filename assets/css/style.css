@@ -43,7 +43,7 @@ h1, h2, h3, h4, h5, h6, p, a, button {
   font-size: 30px;
 }
 
-#abc p {
+#abc p, #test p {
   color: #575757;
   font-weight: 700;
   font-size: 18px;
@@ -54,4 +54,29 @@ h1, h2, h3, h4, h5, h6, p, a, button {
   color: white;
   font-weight: 500;
   font-size: 15px;
+}
+
+@media screen and (max-width: 968px){
+  #form button {
+    padding: 0 5px 0 0;
+  }
+
+  .section-one {
+    padding: 14px;
+  }
+
+  #abc, #test {
+    padding-top: 20px;
+  }
+
+  #test {
+    padding-bottom: 20px;
+  }
+
+}
+
+#test h3 {
+  color: #575757;
+  font-weight: 700;
+  font-size: 30px;
 }
