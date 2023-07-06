@@ -11,33 +11,37 @@
     firebase.initializeApp(firebaseConfig);
   
     // Inicio de sesión
-    $('.login100-form-btn').click(function() {
-        var email = $('input[name="username"]').val();
-        var password = $('input[name="pass"]').val();
-    
-        firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(function(user) {
-            console.log('Inicio de sesión exitoso');
-            // Realizar acciones adicionales después del inicio de sesión exitoso
-        })
-        .catch(function(error) {
-            console.log('Error en el inicio de sesión: ' + error.message);
-        });
-    });
+$('.btn-login').click(function(event) {
+    event.preventDefault();  // Evita el comportamiento predeterminado del botón
 
-    // Registro
-    $('.login100-form-btn').click(function() {
-        var email = $('input[name="username"]').val();
-        var password = $('input[name="pass"]').val();
-    
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(function(user) {
-            console.log('Registro exitoso');
-            // Realizar acciones adicionales después del registro exitoso
-        })
-        .catch(function(error) {
-            console.log('Error en el registro: ' + error.message);
-        });
+    var email = $('input[name="username"]').val();
+    var password = $('input[name="pass"]').val();
+
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(function(user) {
+        console.log('Inicio de sesión exitoso');
+        window.location.href = "/index.html";  // Redirige a la página principal después de iniciar sesión
+    })
+    .catch(function(error) {
+        console.log('Error en el inicio de sesión: ' + error.message);
     });
-    
-  
+});
+
+// Registro
+$('.btn-register').click(function(event) {
+    event.preventDefault();  // Evita el comportamiento predeterminado del botón
+
+    var email = $('input[name="username"]').val();
+    var password = $('input[name="pass"]').val();
+
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(function(user) {
+        console.log('Registro exitoso');
+        window.location.href = "/index.html";  // Redirige a la página principal después del registro
+    })
+    .catch(function(error) {
+        console.log('Error en el registro: ' + error.message);
+    });
+});
+
+   

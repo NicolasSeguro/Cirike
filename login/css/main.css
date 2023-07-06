@@ -25,6 +25,26 @@
   src: url('../fonts/poppins/Poppins-SemiBold.ttf'); 
 }
 
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background-color: #fff;
+  color: #757575;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.google-btn img {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+}
+
+
 
 
 

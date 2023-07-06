@@ -30,6 +30,81 @@
 <!--===============================================================================================-->
 </head>
 <body>
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+	<script type="module">
+		// Import the functions you need from the SDKs you need
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js";
+		import { getAnalytics } from "https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js";
+		import "https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"; // Importa el módulo de autenticación de Firebase
+
+		
+		// TODO: Add SDKs for Firebase products that you want to use
+		// https://firebase.google.com/docs/web/setup#available-libraries
+	  
+		// Your web app's Firebase configuration
+		// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+		const firebaseConfig = {
+		  apiKey: "AIzaSyDnD16spdFbTw3nUycWhpNQaPGbTYd9kOI",
+		  authDomain: "cirike-141a3.firebaseapp.com",
+		  projectId: "cirike-141a3",
+		  storageBucket: "cirike-141a3.appspot.com",
+		  messagingSenderId: "1035532664225",
+		  appId: "1:1035532664225:web:f6d61bee88326ecffa9fe0",
+		  measurementId: "G-NRM5892FT1"
+		};
+	  
+		// Initialize Firebase
+		const app = initializeApp(firebaseConfig);
+		const analytics = getAnalytics(app);
+
+		 // Configura el proveedor de autenticación de Google
+		 var provider = new firebase.auth.GoogleAuthProvider();
+
+		// Obtiene los botones de inicio de sesión y registro con Google
+		var googleLoginBtn = document.getElementById('google-login-btn');
+		var googleRegisterBtn = document.getElementById('google-register-btn');
+
+		// Agrega un event listener al botón de inicio de sesión con Google
+		googleLoginBtn.addEventListener('click', function() {
+		firebase.auth().signInWithPopup(provider)
+			.then(function(result) {
+			// El inicio de sesión con Google fue exitoso
+			var user = result.user;
+			console.log('Inicio de sesión exitoso con Google:', user);
+			// Redireccionar después del inicio de sesión
+			})
+			.catch(function(error) {
+			// Hubo un error durante el inicio de sesión con Google
+			console.error('Error durante el inicio de sesión con Google:', error);
+			});
+		});
+
+		googleRegisterBtn.addEventListener('click', function() {
+		firebase.auth().signInWithPopup(provider)
+			.then(function(result) {
+			// El registro con Google fue exitoso
+			var user = result.user;
+			console.log('Registro exitoso con Google:', user);
+			// Redireccionar después del registro
+			})
+			.catch(function(error) {
+			// Hubo un error durante el registro con Google
+			console.error('Error durante el registro con Google:', error);
+			
+			// Verifica si el error es debido a que el correo electrónico ya está registrado
+			if (error.code === 'auth/email-already-in-use') {
+				alert('Error en el registro: La dirección de correo electrónico ya está siendo utilizada por otra cuenta.');
+			} else {
+				// Otro tipo de error
+				alert('Error en el registro: ' + error.message);
+			}
+			});
+		});
+
+
+
+	  </script>
 	
 	<!-- <div class="limiter">
 		<div class="container-login100" style="background-image: url('images/RespuestaInmediata.png');" id="login-form">
@@ -146,37 +221,34 @@
 					<span class="focus-input100" data-placeholder="&#xf191;"></span>
 				</div>
 
-				<div class="contact100-form-checkbox">
+				<!-- <div class="contact100-form-checkbox">
 					<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
 					<label class="label-checkbox100" for="ckb1">
 						Recuerdame
 					</label>
-				</div>
+				</div> -->
 
 				<div class="container-login100-form-btn">
-					<button class="login100-form-btn">
+					<button class="login100-form-btn btn-login">
 						Iniciar sesión
 					</button>
 				</div>
 
-				<div class="text-center p-t-30">
-					<a class="txt1" href="#">
-						REGISTRARME
-					</a>
-				</div>
 
 				<div class="text-center p-t-30">
-					<a class="txt1" href="#">
-						¿Olvidaste tu contraseña?
+					<a class="txt1" href="#" id="show-register-form">
+					  ¿No tienes una cuenta? Registrarse
 					</a>
-				</div>
+				  </div>
+				  <div class="text-center p-t-30">
+					<a id="forgot-password-link" class="txt1" href="#">
+					  ¿Olvidaste tu contraseña?
+					</a>
+				  </div>
+				  
 			</form>
 		  </div>
-		  <div class="text-center p-t-30">
-			<a class="txt1" href="#" id="show-register-form">
-			  ¿No tienes una cuenta? Registrarse
-			</a>
-		  </div>
+		  
 		</div>
 	  
 		<div id="register-form-container" class="container-login100" style="background-image: url('images/RespuestaInmediata.png'); display: none;">
@@ -202,52 +274,52 @@
 				</div>
 			
 				<div class="container-login100-form-btn">
-				<button class="login100-form-btn">
-					Registrarse
-				</button>
+					<button class="login100-form-btn btn-register">
+						Registrarse
+					</button>
 				</div>
+
 			
 				<div class="text-center p-t-30">
-				<a class="txt1" href="#">
-					¿Ya tienes una cuenta? Iniciar sesión
-				</a>
-				</div>
-			
-				<div class="text-center p-t-30">
-				<a class="txt1" href="#">
-					¿Olvidaste tu contraseña?
-				</a>
-				</div>
+					<a class="txt1" href="#" id="show-login-form">
+					  ¿Ya tienes una cuenta? Iniciar sesión
+					</a>
+				  </div>
+				  
+				  
 			</form>	
 		  </div>
-		  <div class="text-center p-t-30">
-			<a class="txt1" href="#" id="show-login-form">
-			  ¿Ya tienes una cuenta? Iniciar sesión
-			</a>
-		  </div>
+		  
 		</div>
 	</div>
 	  
 	<script>
-	jQuery(document).ready(function() {
-		$(document).ready(function() {
-		// Mostrar formulario de registro al hacer clic en "Registrarse"
-		$('#show-register-form').click(function() {
-			$('#login-form-container').hide();
-			$('#register-form-container').show();
-		});
+		console.log(jQuery);
+		jQuery(document).ready(function($) {
+			console.log("DOM is loaded");
+			$(document).on('click', '#show-register-form', function(event) {
+				event.preventDefault();
+				console.log("show register form clicked");
+				$('#login-form-container').hide();
+				$('#register-form-container').show();
+			});
 
-		$('#show-login-form').click(function() {
-			$('#register-form-container').hide();
-			$('#login-form-container').show();
+			$(document).on('click', '#show-login-form', function(event) {
+				event.preventDefault();
+				console.log("show login form clicked");
+				$('#register-form-container').hide();
+				$('#login-form-container').show();
+			});
 		});
-		});
-	});
-
 	</script>
+			
+		
 	
 
 	<div id="dropDownSelect1"></div>
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!--===============================================================================================-->
