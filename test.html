@@ -185,6 +185,24 @@
       <button type="button" id="submit-btn">Enviar respuestas</button>
     </form>
   </div>
+  <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            ...
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+        </div>
+    </div>
   <!-- Footer -->
   <footer class="p-lg-5 m-0">
     <div class="text-center">
@@ -197,14 +215,24 @@
 <!-- Fin footer -->
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 
-  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-app.js"></script>
+<!-- Firebase Firestore -->
+<script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-firestore.js"></script>
+<!-- Firebase Authentication -->
+<script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-auth.js"></script>
+<!-- Firebase Realtime Database -->
+<script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-database.js"></script>
+
+
   <script>
     // Configura la conexión con Firebase
     var firebaseConfig = {
         apiKey: "AIzaSyDnD16spdFbTw3nUycWhpNQaPGbTYd9kOI",
         authDomain: "cirike-141a3.firebaseapp.com",
+        databaseURL: 'https://cirike-141a3-default-rtdb.firebaseio.com/',
         projectId: "cirike-141a3",
         storageBucket: "cirike-141a3.appspot.com",
         messagingSenderId: "1035532664225",
@@ -324,6 +352,7 @@
         var userId = user.uid;
         var testResultRef = database.ref('testResults/' + userId);
         testResultRef.set({
+          usuario: user.email,
           respuestas: respuestas,
           aciertos: aciertos,
           totalPreguntas: totalPreguntas,
@@ -335,6 +364,59 @@
     $('#submit-btn').click(function() {
       validarRespuestas();
     });
+
+  // Acceder al formulario
+  const form = document.getElementById('test-form');
+
+  // Manejar el envío del formulario
+  form.addEventListener('submit', (e) => {
+    e.preventDefault(); // Prevenir la recarga de la página
+
+    // Crear un objeto para almacenar las respuestas
+    let answers = {};
+
+    // Iterar sobre cada elemento del formulario
+    for (let i = 0; i < form.elements.length; i++) {
+      let elem = form.elements[i];
+
+      // Solo considerar los campos de entrada que tienen un nombre y un valor
+      if (elem.name && elem.value) {
+        // Asegurarte de que puedes manejar múltiples respuestas para una pregunta (para checkbox)
+        if (elem.type === 'checkbox' && elem.checked) {
+          // Si ya existe una respuesta para esta pregunta, añadir a ella
+          if (answers[elem.name]) {
+            answers[elem.name].push(elem.value);
+          }
+          // Si no, crear una nueva respuesta
+          else {
+            answers[elem.name] = [elem.value];
+          }
+        }
+        // Para otros tipos de entrada (radio, texto, etc.)
+        else if (elem.type !== 'checkbox') {
+          answers[elem.name] = elem.value;
+        }
+      }
+    }
+
+    console.log('Probando si llega hasta acá');
+    // Añadir la fecha y hora actuales a las respuestas
+    answers.timestamp = firebase.firestore.FieldValue.serverTimestamp();
+
+    firebase.firestore().collection('tests').add(answers)
+    .then(() => {
+        console.log('Respuestas guardadas exitosamente');
+        var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+        myModal.show();
+    })
+    .catch((error) => {
+        console.error('Error al guardar las respuestas: ', error);
+        // Aquí puedes mostrar un mensaje de error al usuario
+    });
+    });
+
+
   </script>
+  
 </body>
 </html>
