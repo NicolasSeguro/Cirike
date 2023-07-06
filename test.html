@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,13 +14,13 @@
         <h3>1. Misión como Hillsong. Marca la respuesta correcta</h3>
         <div class="options">
           <label>
-            <input type="radio" name="q1" value="A"> A. Amar a Dios y a las personas
+            <input type="radio" name="q1" value="A"> Amar a Dios y a las personas
           </label>
           <label>
-            <input type="radio" name="q1" value="B"> B. Crear una iglesia saludable que pueda cambiar la vida de las personas a través de Jesús (respuesta correcta)
+            <input type="radio" name="q1" value="B"> Crear una iglesia saludable que pueda cambiar la vida de las personas a través de Jesús (respuesta correcta)
           </label>
           <label>
-            <input type="radio" name="q1" value="C"> C. Ayudar a los más necesitados
+            <input type="radio" name="q1" value="C"> Ayudar a los más necesitados
           </label>
         </div>
       </div>
@@ -45,7 +45,7 @@
         </div>
       </div>
       <div class="question">
-        <h3>3. Termina la oración: Hillsong citycare es el ....</h3>
+        <h3>3. Termina la oración: Hillsong citycare es el .....</h3>
         <input type="text" name="q3">
       </div>
       <div class="question">
@@ -74,12 +74,12 @@
           </label>
         </div>
       </div>
-        <div class="question">
-            <h3>5. Menciona algunas de las excusas que tenemos para hacer CityCare</h3>
-        </div>
-      <textarea name="q5"></textarea>
       <div class="question">
-        <h3>6. Reglas de oro. ¿Cuáles recordas que se han mencionado?</h3>
+        <h3>5. Menciona algunas de las excusas que tenemos para hacer CityCare</h3>
+        <textarea name="q5"></textarea>
+      </div>
+      <div class="question">
+        <h3>6. Reglas de oro. ¿Cuáles recuerdas que se han mencionado?</h3>
         <div class="options">
           <label>
             <input type="checkbox" name="q6" value="A"> Disfruta el servicio (correcta)
@@ -140,11 +140,151 @@
           <label>
             <input type="checkbox" name="q7" value="H"> No les hacemos promesas (correcta)
           </label>
-          <button type="submit" class="btn-submit">Enviar respuestas</button>
         </div>
       </div>
+      <button type="button" id="submit-btn">Enviar respuestas</button>
     </form>
   </div>
-  <script src="js/test.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+  <script>
+    // Configura la conexión con Firebase
+    var firebaseConfig = {
+        apiKey: "AIzaSyDnD16spdFbTw3nUycWhpNQaPGbTYd9kOI",
+        authDomain: "cirike-141a3.firebaseapp.com",
+        projectId: "cirike-141a3",
+        storageBucket: "cirike-141a3.appspot.com",
+        messagingSenderId: "1035532664225",
+        appId: "1:1035532664225:web:f6d61bee88326ecffa9fe0",
+        measurementId: "G-NRM5892FT1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    
+    var database = firebase.database();
+
+    // Función para validar las respuestas del test
+    function validarRespuestas() {
+      var respuestas = {
+        q1: $('input[name="q1"]:checked').val(),
+        q2: $('input[name="q2"]:checked').map(function() { return $(this).val(); }).get(),
+        q3: $('input[name="q3"]').val(),
+        q4: $('input[name="q4"]:checked').map(function() { return $(this).val(); }).get(),
+        q5: $('textarea[name="q5"]').val(),
+        q6: $('input[name="q6"]:checked').map(function() { return $(this).val(); }).get(),
+        q7: $('input[name="q7"]:checked').map(function() { return $(this).val(); }).get(),
+      };
+
+      // Respuestas correctas
+      var respuestasCorrectas = {
+        q1: 'B',
+        q2: ['A', 'B'],
+        q3: 'corazón de la iglesia',
+        q4: ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
+        q5: '', // Inserta las respuestas correctas para la pregunta 5
+        q6: ['A', 'B', 'C', 'D', 'E', 'F'],
+        q7: ['A', 'D', 'H'],
+      };
+
+      // Valida las respuestas
+      var aciertos = 0;
+      var totalPreguntas = 7;
+
+      // Pregunta 1
+      if (respuestas.q1 === respuestasCorrectas.q1) {
+        aciertos++;
+        $('#question1').addClass('correct');
+      } else {
+        $('#question1').addClass('incorrect');
+      }
+
+      // Pregunta 2
+      var q2RespuestasCorrectas = respuestasCorrectas.q2;
+      var q2RespuestasSeleccionadas = respuestas.q2;
+      var q2Correcto = q2RespuestasCorrectas.length === q2RespuestasSeleccionadas.length && q2RespuestasCorrectas.every(function(val) {
+        return q2RespuestasSeleccionadas.indexOf(val) !== -1;
+      });
+      if (q2Correcto) {
+        aciertos++;
+        $('#question2').addClass('correct');
+      } else {
+        $('#question2').addClass('incorrect');
+      }
+
+      // Pregunta 3
+      if (respuestas.q3.toLowerCase() === respuestasCorrectas.q3.toLowerCase()) {
+        aciertos++;
+        $('#question3').addClass('correct');
+      } else {
+        $('#question3').addClass('incorrect');
+      }
+
+      // Pregunta 4
+      var q4RespuestasCorrectas = respuestasCorrectas.q4;
+      var q4RespuestasSeleccionadas = respuestas.q4;
+      var q4Correcto = q4RespuestasCorrectas.length === q4RespuestasSeleccionadas.length && q4RespuestasCorrectas.every(function(val) {
+        return q4RespuestasSeleccionadas.indexOf(val) !== -1;
+      });
+      if (q4Correcto) {
+        aciertos++;
+        $('#question4').addClass('correct');
+      } else {
+        $('#question4').addClass('incorrect');
+      }
+
+      // Pregunta 5
+      if (respuestas.q5.toLowerCase() === respuestasCorrectas.q5.toLowerCase()) {
+        aciertos++;
+        $('#question5').addClass('correct');
+      } else {
+        $('#question5').addClass('incorrect');
+      }
+
+      // Pregunta 6
+      var q6RespuestasCorrectas = respuestasCorrectas.q6;
+      var q6RespuestasSeleccionadas = respuestas.q6;
+      var q6Correcto = q6RespuestasCorrectas.length === q6RespuestasSeleccionadas.length && q6RespuestasCorrectas.every(function(val) {
+        return q6RespuestasSeleccionadas.indexOf(val) !== -1;
+      });
+      if (q6Correcto) {
+        aciertos++;
+        $('#question6').addClass('correct');
+      } else {
+        $('#question6').addClass('incorrect');
+      }
+
+      // Pregunta 7
+      var q7RespuestasCorrectas = respuestasCorrectas.q7;
+      var q7RespuestasSeleccionadas = respuestas.q7;
+      var q7Correcto = q7RespuestasCorrectas.length === q7RespuestasSeleccionadas.length && q7RespuestasCorrectas.every(function(val) {
+        return q7RespuestasSeleccionadas.indexOf(val) !== -1;
+      });
+      if (q7Correcto) {
+        aciertos++;
+        $('#question7').addClass('correct');
+      } else {
+        $('#question7').addClass('incorrect');
+      }
+
+      // Guarda los resultados en la base de datos
+      var user = firebase.auth().currentUser;
+      if (user) {
+        var userId = user.uid;
+        var testResultRef = database.ref('testResults/' + userId);
+        testResultRef.set({
+          respuestas: respuestas,
+          aciertos: aciertos,
+          totalPreguntas: totalPreguntas,
+        });
+      }
+    }
+
+    // Event listener para el botón de envío de respuestas
+    $('#submit-btn').click(function() {
+      validarRespuestas();
+    });
+  </script>
 </body>
 </html>
