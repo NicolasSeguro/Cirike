@@ -34,14 +34,20 @@ $('.btn-register').click(function(event) {
     var email = $('input[name="username"]').val();
     var password = $('input[name="pass"]').val();
 
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then(function(user) {
-        console.log('Registro exitoso');
-        window.location.href = "/index.html";  // Redirige a la página principal después del registro
-    })
-    .catch(function(error) {
-        console.log('Error en el registro: ' + error.message);
-    });
+    // Verificar la longitud de la contraseña
+    if (password.length >= 6) {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(function(user) {
+            console.log('Registro exitoso');
+            window.location.href = "/index.html";  // Redirige a la página principal después del registro
+        })
+        .catch(function(error) {
+            console.log('Error en el registro: ' + error.message);
+        });
+      } else {
+        // Mostrar alert si la contraseña no tiene al menos 6 caracteres
+        alert('La contraseña debe tener al menos 6 caracteres.');
+      }
 });
 
    
